@@ -1,0 +1,1 @@
+ALTER TABLE "alliance" ADD COLUMN "name" text;
