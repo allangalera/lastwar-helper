@@ -1,9 +1,14 @@
 import { Title } from "@solidjs/meta";
-import { action, createAsync, query, useSubmission } from "@solidjs/router";
+import {
+  action,
+  createAsync,
+  query,
+  redirect,
+  useSubmission,
+} from "@solidjs/router";
 import { and, eq } from "drizzle-orm";
 import { For, getRequestEvent } from "solid-js/web";
 import { auth } from "~/auth";
-import { Authentication } from "~/components/authentication";
 import { db } from "~/db";
 import {
   character,
@@ -19,6 +24,10 @@ const getAlliances = query(async () => {
   const session = await auth.api.getSession({
     headers: event?.request.headers!,
   });
+
+  if (!session?.session) {
+    throw redirect("/login");
+  }
 
   return await db
     .select()
@@ -113,7 +122,6 @@ export default function Home() {
   return (
     <main>
       <Title>Hello World</Title>
-      <Authentication />
       <p>characters</p>
       <form action={addCharacter} method="post">
         <label>
@@ -131,7 +139,7 @@ export default function Home() {
       <For each={characters()}>
         {(item) => (
           <div>
-            {item.name}
+            <a href={`/character/${item.id}`}>{item.name}</a>
             {item.combatPower}
             <div>
               <form action={deleteCharacter} method="post">
@@ -155,7 +163,7 @@ export default function Home() {
       <For each={alliances()}>
         {(item) => (
           <div>
-            {item.name}
+            <a href={`/alliance/${item.id}`}>{item.name}</a>
             <div>
               <form action={deleteAlliance} method="post">
                 <input name="id" value={item.id} type="hidden" />
