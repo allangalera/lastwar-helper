@@ -5,7 +5,6 @@ export default function Login() {
   return (
     <main>
       <Title>Login</Title>
-      <Authentication />
     </main>
   );
 }

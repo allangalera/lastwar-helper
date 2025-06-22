@@ -2,8 +2,8 @@
   "name": "example-basic",
   "type": "module",
   "scripts": {
-    "dev": "vinxi dev",
     "build": "vinxi build",
+    "dev": "vinxi dev",
     "start": "vinxi start",
     "version": "vinxi version"
   },
@@ -19,6 +19,7 @@
     "nanoid": "^5.1.5",
     "pg": "^8.16.0",
     "solid-js": "^1.9.5",
+    "sst": "3.17.6",
     "vinxi": "^0.5.3",
     "zod": "^3.25.67"
   },
@@ -28,5 +29,8 @@
   "devDependencies": {
     "@types/pg": "^8.15.4",
     "drizzle-kit": "^0.31.1"
+  },
+  "overrides": {
+    "nitropack": "npm:nitropack-nightly@latest"
   }
 }

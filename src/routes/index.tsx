@@ -42,6 +42,10 @@ const addAlliance = action(async (formData: FormData) => {
     headers: event?.request.headers!,
   });
 
+  if (!session?.session) {
+    throw redirect("/login");
+  }
+
   const allianceToAdd = allianceInsertSchema.parse({
     id: nanoid(),
     userId: session?.user.id!,
@@ -57,6 +61,10 @@ const deleteAlliance = action(async (formData: FormData) => {
   const session = await auth.api.getSession({
     headers: event?.request.headers!,
   });
+
+  if (!session?.session) {
+    throw redirect("/login");
+  }
 
   const allianceId = formData.get("id") as string;
 
@@ -74,6 +82,10 @@ const getCharacters = query(async () => {
     headers: event?.request.headers!,
   });
 
+  if (!session?.session) {
+    throw redirect("/login");
+  }
+
   return await db
     .select()
     .from(character)
@@ -86,6 +98,10 @@ const addCharacter = action(async (formData: FormData) => {
   const session = await auth.api.getSession({
     headers: event?.request.headers!,
   });
+
+  if (!session?.session) {
+    throw redirect("/login");
+  }
 
   const characterToAdd = characterInsertSchema.parse({
     id: nanoid(),
@@ -102,6 +118,10 @@ const deleteCharacter = action(async (formData: FormData) => {
   const session = await auth.api.getSession({
     headers: event?.request.headers!,
   });
+
+  if (!session?.session) {
+    throw redirect("/login");
+  }
 
   const characterId = formData.get("id") as string;
 
