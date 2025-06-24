@@ -1,10 +1,15 @@
-import { Title } from "@solidjs/meta";
-import { Authentication } from "~/components/authentication";
+import { createFileRoute } from "@tanstack/solid-router";
+import { Authentication } from "../components/authentication";
 
-export default function Login() {
+export const Route = createFileRoute("/login")({
+  component: RouteComponent,
+});
+
+function RouteComponent() {
   return (
-    <main>
-      <Title>Login</Title>
-    </main>
+    <div>
+      <Authentication />
+      Hello "/login"!
+    </div>
   );
 }

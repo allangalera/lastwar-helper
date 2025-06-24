@@ -5,10 +5,6 @@
 
 declare module "sst" {
   export interface Resource {
-    "MyWeb": {
-      "type": "sst.aws.SolidStart"
-      "url": string
-    }
   }
 }
 /// <reference path="sst-env.d.ts" />

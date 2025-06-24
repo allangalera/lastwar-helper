@@ -1,17 +1,17 @@
-import { useNavigate } from "@solidjs/router";
-import { Show } from "solid-js";
-import { authClient } from "~/auth-client";
+import { createEffect, onMount, Show } from "solid-js";
+import { authClient } from "../../auth-client";
+import { useNavigate } from "@tanstack/solid-router";
 
 export function Authentication() {
   const navigate = useNavigate();
   const session = authClient.useSession();
 
   const isAuthenticated = () => !!session().data?.session;
-  const isPending = () => !!session().isPending;
+  const isPending = () => session().isPending;
 
   async function handleSignOut() {
     await authClient.signOut();
-    navigate("/login", { replace: true });
+    navigate({ to: "/login" });
   }
 
   async function handleSignInWithGoogle() {
