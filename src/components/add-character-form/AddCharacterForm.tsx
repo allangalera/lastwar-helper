@@ -1,11 +1,11 @@
-import { useRouter } from "@tanstack/solid-router";
+import { useQueryClient } from "@tanstack/solid-query";
 import { createSignal } from "solid-js";
-import { addCharacter } from "~/service";
+import { addCharacter, getCharactersQueryOptions } from "~/service";
 
 export function AddCharacterForm() {
-  const router = useRouter();
+  const queryClient = useQueryClient();
   const [name, setName] = createSignal<string>("");
-  const [combarPower, setCombarPower] = createSignal<string>("");
+  const [combatPower, setCombatPower] = createSignal<string>("");
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
 
   const handleFormSubmission = async () => {
@@ -14,11 +14,14 @@ export function AddCharacterForm() {
       await addCharacter({
         data: {
           name: name(),
+          combatPower: combatPower(),
         },
       });
       setName("");
-      setCombarPower("");
-      router.invalidate();
+      setCombatPower("");
+      queryClient.invalidateQueries({
+        queryKey: getCharactersQueryOptions.queryKey,
+      });
     } catch {
     } finally {
       setIsLoading(false);
@@ -40,9 +43,9 @@ export function AddCharacterForm() {
           Combat Power
           <input
             type="text"
-            name="combarPower"
-            value={combarPower()}
-            onInput={(e) => setCombarPower(e.target.value)}
+            name="combatPower"
+            value={combatPower()}
+            onInput={(e) => setCombatPower(e.target.value)}
           />
         </label>
         <button

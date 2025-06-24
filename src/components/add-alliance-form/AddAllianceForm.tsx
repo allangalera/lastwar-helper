@@ -1,22 +1,25 @@
+import { useQueryClient } from "@tanstack/solid-query";
 import { useRouter } from "@tanstack/solid-router";
 import { createSignal } from "solid-js";
-import { addAlliance } from "~/service";
+import { addAlliance, getAlliancesQueryOptions } from "~/service";
 
 export function AddAllianceForm() {
+  const queryClient = useQueryClient();
   const [name, setName] = createSignal<string>("");
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
 
   const handleFormSubmission = async () => {
-    console.log("handleFormSubmission", name());
     setIsLoading(true);
     try {
-      const response = await addAlliance({
+      await addAlliance({
         data: {
           name: name(),
         },
       });
-      console.log({ response });
       setName("");
+      queryClient.invalidateQueries({
+        queryKey: getAlliancesQueryOptions.queryKey,
+      });
     } catch {
     } finally {
       setIsLoading(false);

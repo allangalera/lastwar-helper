@@ -3,13 +3,16 @@ import {
   createRootRoute,
   HeadContent,
   Scripts,
+  createRootRouteWithContext,
 } from "@tanstack/solid-router";
+import { QueryClientProvider } from "@tanstack/solid-query";
+import { MyRouterContext, queryClient } from "~/router";
 
 function NotFound() {
   return <p>404 - Not found</p>;
 }
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<MyRouterContext>()({
   head: () => ({
     meta: [
       {
@@ -29,5 +32,9 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
-  return <Outlet />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Outlet />
+    </QueryClientProvider>
+  );
 }

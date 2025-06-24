@@ -17,6 +17,9 @@ importers:
       '@solidjs/start':
         specifier: ^1.1.0
         version: 1.1.4(solid-js@1.9.7)(vinxi@0.5.7(@types/node@24.0.3)(db0@0.3.2(drizzle-orm@0.44.2(@types/pg@8.15.4)(kysely@0.28.2)(pg@8.16.0)(postgres@3.4.7)))(drizzle-orm@0.44.2(@types/pg@8.15.4)(kysely@0.28.2)(pg@8.16.0)(postgres@3.4.7))(ioredis@5.6.1)(jiti@2.4.2)(terser@5.43.0)(tsx@4.20.3)(xml2js@0.6.2))(vite@6.3.5(@types/node@24.0.3)(jiti@2.4.2)(terser@5.43.0)(tsx@4.20.3))
+      '@tanstack/solid-query':
+        specifier: ^5.81.2
+        version: 5.81.2(solid-js@1.9.7)
       '@tanstack/solid-router':
         specifier: ^1.121.27
         version: 1.121.27(solid-js@1.9.7)
@@ -44,9 +47,6 @@ importers:
       pg:
         specifier: ^8.16.0
         version: 8.16.0
-      postgres:
-        specifier: ^3.4.7
-        version: 3.4.7
       solid-js:
         specifier: ^1.9.5
         version: 1.9.7
@@ -1095,6 +1095,9 @@ packages:
     resolution: {integrity: sha512-8BFGA7fpElicM1aEfZRDoEiWgMrNb/fVuJjSKv+nYtbp7jdtqt57fROi/uDGf6PLlgJbMoT3GWxqveZisOUEKA==}
     engines: {node: '>=12'}
 
+  '@tanstack/query-core@5.81.2':
+    resolution: {integrity: sha512-QLYkPdrudoMATDFa3MiLEwRhNnAlzHWDf0LKaXUqJd0/+QxN8uTPi7bahRlxoAyH0UbLMBdeDbYzWALj7THOtw==}
+
   '@tanstack/router-core@1.121.27':
     resolution: {integrity: sha512-6lCQ3p7KhJ8Qy33TPRM6wIkQ1XKaikD5qqx3K2fPr3YtyDNefKQValbSAkb2CBB+hlDodfHNyxemE9alnQr55A==}
     engines: {node: '>=12'}
@@ -1135,6 +1138,11 @@ packages:
   '@tanstack/server-functions-plugin@1.121.31':
     resolution: {integrity: sha512-K5SKY/CgWAOlPhduhaJxAcVxlVYQa7cCQJZITbc87/Y06bB2Iau0olG1mE3M0KqphRpMnbXl7hrDxHwg65L3sg==}
     engines: {node: '>=12'}
+
+  '@tanstack/solid-query@5.81.2':
+    resolution: {integrity: sha512-WgkaXkQpAyPeTtCzaysv5UufeO0BiA8hskDv/BPtk7dK+g39JtEXSv7cSpv32zEzFXSGv2w3Fiajvh9xWpo7Kw==}
+    peerDependencies:
+      solid-js: ^1.6.0
 
   '@tanstack/solid-router@1.121.27':
     resolution: {integrity: sha512-cqFCw8T1E/4I2HiEBrS8W4JhlzO3URVGkpi3fvapfaGyRHyWF8x4sCYtXyBdWr0zcCtznAGHYVtIQrtgYZHR7A==}
@@ -5207,6 +5215,8 @@ snapshots:
 
   '@tanstack/history@1.121.21': {}
 
+  '@tanstack/query-core@5.81.2': {}
+
   '@tanstack/router-core@1.121.27':
     dependencies:
       '@tanstack/history': 1.121.21
@@ -5290,6 +5300,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
       - vite
+
+  '@tanstack/solid-query@5.81.2(solid-js@1.9.7)':
+    dependencies:
+      '@tanstack/query-core': 5.81.2
+      solid-js: 1.9.7
 
   '@tanstack/solid-router@1.121.27(solid-js@1.9.7)':
     dependencies:
@@ -7626,7 +7641,8 @@ snapshots:
     dependencies:
       xtend: 4.0.2
 
-  postgres@3.4.7: {}
+  postgres@3.4.7:
+    optional: true
 
   precinct@12.2.0:
     dependencies:

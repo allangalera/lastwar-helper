@@ -10,6 +10,12 @@ import {
 import { nanoid } from "nanoid";
 import { createServerFn } from "@tanstack/solid-start";
 import { getHeaders, setResponseStatus } from "@tanstack/solid-start/server";
+import { queryOptions } from "@tanstack/solid-query";
+
+export const getAlliancesQueryOptions = queryOptions({
+  queryKey: ["getAlliances"],
+  queryFn: () => getAlliances(),
+});
 
 export const getAlliances = createServerFn().handler(async () => {
   const headers = getHeaders();
@@ -27,6 +33,10 @@ export const getAlliances = createServerFn().handler(async () => {
     .select()
     .from(alliance)
     .where(eq(alliance.userId, session?.user.id!));
+});
+export const getCharactersQueryOptions = queryOptions({
+  queryKey: ["getCharacters"],
+  queryFn: () => getCharacters(),
 });
 
 export const getCharacters = createServerFn().handler(async () => {
@@ -120,6 +130,37 @@ export const addAlliance = createServerFn({ method: "POST" })
 
     return allianceToAdd;
   });
+
+const deleteAllianceSchema = allianceInsertSchema.pick({
+  id: true,
+});
+
+export const deleteAlliance = createServerFn({ method: "POST" })
+  .validator((data: unknown) => {
+    return deleteAllianceSchema.parse(data);
+  })
+  .handler(async (ctx) => {
+    const headers = getHeaders();
+    const session = await auth.api.getSession({
+      // @ts-expect-error
+      headers: headers,
+    });
+
+    if (!session?.session) {
+      setResponseStatus(401);
+      return;
+    }
+
+    await db
+      .delete(alliance)
+      .where(
+        and(
+          eq(alliance.id, ctx.data.id),
+          eq(alliance.userId, session?.user.id!)
+        )
+      );
+  });
+
 const addCharacterSchema = characterInsertSchema.pick({
   name: true,
   combatPower: true,
@@ -152,68 +193,32 @@ export const addCharacter = createServerFn({ method: "POST" })
     return characterToAdd;
   });
 
-// export const deleteAlliance = action(async (formData: FormData) => {
-//   const event = getRequestEvent();
-//   const session = await auth.api.getSession({
-//     headers: event?.request.headers!,
-//   });
+const deleteCharacterSchema = characterInsertSchema.pick({
+  id: true,
+});
 
-//   if (!session?.session) {
-//     return json(undefined, {
-//       status: 401,
-//     });
-//   }
+export const deleteCharacter = createServerFn({ method: "POST" })
+  .validator((data: unknown) => {
+    return deleteCharacterSchema.parse(data);
+  })
+  .handler(async (ctx) => {
+    const headers = getHeaders();
+    const session = await auth.api.getSession({
+      // @ts-expect-error
+      headers: headers,
+    });
 
-//   const allianceId = formData.get("id") as string;
+    if (!session?.session) {
+      setResponseStatus(401);
+      return;
+    }
 
-//   await db
-//     .delete(alliance)
-//     .where(
-//       and(eq(alliance.id, allianceId), eq(alliance.userId, session?.user.id!))
-//     );
-// }, "deleteAlliance");
-
-// export const addCharacter = action(async (formData: FormData) => {
-//   const event = getRequestEvent();
-//   const session = await auth.api.getSession({
-//     headers: event?.request.headers!,
-//   });
-
-//   if (!session?.session) {
-//     return json(undefined, {
-//       status: 401,
-//     });
-//   }
-
-//   const characterToAdd = characterInsertSchema.parse({
-//     id: nanoid(),
-//     userId: session?.user.id!,
-//     name: formData.get("name") as string,
-//     combatPower: formData.get("combatPower") as string,
-//   });
-//   await db.insert(character).values(characterToAdd);
-// }, "addCharacter");
-
-// export const deleteCharacter = action(async (formData: FormData) => {
-//   const event = getRequestEvent();
-//   const session = await auth.api.getSession({
-//     headers: event?.request.headers!,
-//   });
-
-//   if (!session?.session) {
-//     return json(undefined, {
-//       status: 401,
-//     });
-//   }
-
-//   const characterId = formData.get("id") as string;
-
-//   await db
-//     .delete(character)
-//     .where(
-//       and(
-//         eq(character.id, characterId),
-//         eq(character.userId, session?.user.id!)
-//       )
-//     );
-// }, "deleteCharacter");
+    await db
+      .delete(character)
+      .where(
+        and(
+          eq(character.id, ctx.data.id),
+          eq(character.userId, session?.user.id!)
+        )
+      );
+  });

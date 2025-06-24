@@ -1,30 +1,44 @@
 import { createFileRoute, Link } from "@tanstack/solid-router";
 import { Authentication } from "../components/authentication";
-import { getAlliances, getCharacters } from "../service";
-import { For } from "solid-js";
+import {
+  getAlliancesQueryOptions,
+  getCharactersQueryOptions,
+} from "../service";
+import { createMemo, For } from "solid-js";
 import { AddAllianceForm } from "~/components/add-alliance-form";
 import { AddCharacterForm } from "~/components/add-character-form";
+import { useQuery } from "@tanstack/solid-query";
+import { AlliancesListItem } from "~/components/alliances-list-item";
+import { CharacterListItem } from "~/components/character-list-item";
 
 export const Route = createFileRoute("/")({
   component: Home,
-  loader: async () => {
-    const [alliances, characters] = await Promise.all([
-      getAlliances(),
-      getCharacters(),
+  loader: async ({ context }) => {
+    await Promise.all([
+      context.queryClient.ensureQueryData(getAlliancesQueryOptions),
+      context.queryClient.ensureQueryData(getCharactersQueryOptions),
     ]);
-
-    return {
-      alliances,
-      characters,
-    };
   },
 });
 
 function Home() {
-  const state = Route.useLoaderData();
+  const getAlliancesQuery = useQuery(() => getAlliancesQueryOptions);
+  const getCharactersQuery = useQuery(() => getCharactersQueryOptions);
 
-  const alliances = () => state().alliances;
-  const characters = () => state().characters;
+  const alliances = createMemo(() => {
+    if (getAlliancesQuery.data) {
+      return getAlliancesQuery.data;
+    } else {
+      return [];
+    }
+  });
+  const characters = createMemo(() => {
+    if (getCharactersQuery.data) {
+      return getCharactersQuery.data;
+    } else {
+      return [];
+    }
+  });
   return (
     <>
       <Link to="/">Home</Link>
@@ -33,32 +47,17 @@ function Home() {
       <AddCharacterForm />
       <For each={characters()}>
         {(item) => (
-          <div>
-            <a href={`/characters/${item.id}`}>{item.name}</a>
-            {item.combatPower}
-            <div>
-              <form method="post">
-                <input name="id" value={item.id} type="hidden" />
-                <button>delete</button>
-              </form>
-            </div>
-          </div>
+          <CharacterListItem
+            id={item.id}
+            name={item.name!}
+            combatPower={item.combatPower!}
+          />
         )}
       </For>
       <p>Alliances</p>
       <AddAllianceForm />
       <For each={alliances()}>
-        {(item) => (
-          <div>
-            <a href={`/alliances/${item.id}`}>{item.name}</a>
-            <div>
-              <form method="post">
-                <input name="id" value={item.id} type="hidden" />
-                <button>delete</button>
-              </form>
-            </div>
-          </div>
-        )}
+        {(item) => <AlliancesListItem id={item.id} name={item.name!} />}
       </For>
     </>
   );
