@@ -1,4 +1,4 @@
-import { useQueryClient } from "@tanstack/solid-query";
+import { useMutation, useQueryClient } from "@tanstack/solid-query";
 import { createSignal } from "solid-js";
 import { addCharacter, getCharactersQueryOptions } from "~/service";
 
@@ -7,6 +7,9 @@ export function AddCharacterForm() {
   const [name, setName] = createSignal<string>("");
   const [combatPower, setCombatPower] = createSignal<string>("");
   const [isLoading, setIsLoading] = createSignal<boolean>(false);
+  // const { mutate, isPending, isSuccess } = useMutation({
+  //   mutationFn: addCharacter,
+  // });
 
   const handleFormSubmission = async () => {
     setIsLoading(true);

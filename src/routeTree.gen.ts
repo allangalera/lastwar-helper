@@ -13,6 +13,8 @@ import { createServerRootRoute } from '@tanstack/solid-start/server'
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CharactersCharacterIdRouteImport } from './routes/characters/$characterId'
+import { Route as AlliancesAllianceIdRouteImport } from './routes/alliances/$allianceId'
 import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth/$'
 
 const rootServerRouteImport = createServerRootRoute()
@@ -27,6 +29,16 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CharactersCharacterIdRoute = CharactersCharacterIdRouteImport.update({
+  id: '/characters/$characterId',
+  path: '/characters/$characterId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AlliancesAllianceIdRoute = AlliancesAllianceIdRouteImport.update({
+  id: '/alliances/$allianceId',
+  path: '/alliances/$allianceId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -36,27 +48,44 @@ const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/alliances/$allianceId': typeof AlliancesAllianceIdRoute
+  '/characters/$characterId': typeof CharactersCharacterIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/alliances/$allianceId': typeof AlliancesAllianceIdRoute
+  '/characters/$characterId': typeof CharactersCharacterIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/alliances/$allianceId': typeof AlliancesAllianceIdRoute
+  '/characters/$characterId': typeof CharactersCharacterIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/alliances/$allianceId'
+    | '/characters/$characterId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login'
-  id: '__root__' | '/' | '/login'
+  to: '/' | '/login' | '/alliances/$allianceId' | '/characters/$characterId'
+  id:
+    | '__root__'
+    | '/'
+    | '/login'
+    | '/alliances/$allianceId'
+    | '/characters/$characterId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
+  AlliancesAllianceIdRoute: typeof AlliancesAllianceIdRoute
+  CharactersCharacterIdRoute: typeof CharactersCharacterIdRoute
 }
 export interface FileServerRoutesByFullPath {
   '/api/auth/$': typeof ApiAuthSplatServerRoute
@@ -96,6 +125,20 @@ declare module '@tanstack/solid-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/characters/$characterId': {
+      id: '/characters/$characterId'
+      path: '/characters/$characterId'
+      fullPath: '/characters/$characterId'
+      preLoaderRoute: typeof CharactersCharacterIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/alliances/$allianceId': {
+      id: '/alliances/$allianceId'
+      path: '/alliances/$allianceId'
+      fullPath: '/alliances/$allianceId'
+      preLoaderRoute: typeof AlliancesAllianceIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 declare module '@tanstack/solid-start/server' {
@@ -113,6 +156,8 @@ declare module '@tanstack/solid-start/server' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
+  AlliancesAllianceIdRoute: AlliancesAllianceIdRoute,
+  CharactersCharacterIdRoute: CharactersCharacterIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
