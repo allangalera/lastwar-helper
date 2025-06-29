@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/solid-router";
-// import { Authentication } from "../components/authentication";
+import { Authentication } from "../components/authentication";
 
 export const Route = createFileRoute("/login")({
   component: RouteComponent,
@@ -8,7 +8,7 @@ export const Route = createFileRoute("/login")({
 function RouteComponent() {
   return (
     <div>
-      {/* <Authentication /> */}
+      <Authentication />
       Hello "/login"!
     </div>
   );
