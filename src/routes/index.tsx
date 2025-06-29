@@ -44,7 +44,7 @@ function Home() {
       <Link to="/">Home</Link>
       {/* <Authentication /> */}
       <p>characters</p>
-      {/* <AddCharacterForm /> */}
+      <AddCharacterForm />
       {/* <For each={characters()}>
         {(item) => (
           <CharacterListItem

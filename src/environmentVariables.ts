@@ -22,12 +22,14 @@ const EnvVarResult = envVarSchema.safeParse({
   ...process.env,
 });
 
-if (EnvVarResult.error) {
-  console.dir(z.prettifyError(EnvVarResult.error), {
-    depth: null,
-    colors: true,
-  });
-  process.exit(1);
-}
+// if (EnvVarResult.error) {
+//   console.dir(z.prettifyError(EnvVarResult.error), {
+//     depth: null,
+//     colors: true,
+//   });
+//   process.exit(1);
+// }
+
+console.log(EnvVarResult.data);
 
 export const EnvVar = EnvVarResult.data;
