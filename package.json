@@ -3,7 +3,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build"
+    "build": "vite build",
+    "deploy": "pnpm run build && wrangler deploy"
   },
   "dependencies": {
     "@solidjs/meta": "^0.29.4",
@@ -18,7 +19,7 @@
     "drizzle-orm": "^0.44.2",
     "drizzle-zod": "^0.8.2",
     "nanoid": "^5.1.5",
-    "pg": "^8.16.0",
+    "postgres": "^3.4.7",
     "solid-js": "^1.9.5",
     "sst": "3.17.6",
     "vinxi": "^0.5.3",
@@ -29,10 +30,10 @@
     "node": ">=22"
   },
   "devDependencies": {
-    "@types/pg": "^8.15.4",
     "drizzle-kit": "^0.31.1",
     "typescript": "^5.8.3",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "^5.1.4",
+    "wrangler": "^4.22.0"
   },
   "overrides": {
     "nitropack": "npm:nitropack-nightly@latest"

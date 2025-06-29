@@ -12,7 +12,6 @@ import { createServerRootRoute } from '@tanstack/solid-start/server'
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CharactersCharacterIdRouteImport } from './routes/characters/$characterId'
 import { Route as AlliancesAllianceIdRouteImport } from './routes/alliances/$allianceId'
@@ -23,11 +22,6 @@ const rootServerRouteImport = createServerRootRoute()
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -53,14 +47,12 @@ const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/login': typeof LoginRoute
   '/alliances/$allianceId': typeof AlliancesAllianceIdRoute
   '/characters/$characterId': typeof CharactersCharacterIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/login': typeof LoginRoute
   '/alliances/$allianceId': typeof AlliancesAllianceIdRoute
   '/characters/$characterId': typeof CharactersCharacterIdRoute
@@ -68,7 +60,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/login': typeof LoginRoute
   '/alliances/$allianceId': typeof AlliancesAllianceIdRoute
   '/characters/$characterId': typeof CharactersCharacterIdRoute
@@ -77,21 +68,14 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/about'
     | '/login'
     | '/alliances/$allianceId'
     | '/characters/$characterId'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/about'
-    | '/login'
-    | '/alliances/$allianceId'
-    | '/characters/$characterId'
+  to: '/' | '/login' | '/alliances/$allianceId' | '/characters/$characterId'
   id:
     | '__root__'
     | '/'
-    | '/about'
     | '/login'
     | '/alliances/$allianceId'
     | '/characters/$characterId'
@@ -99,7 +83,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
   LoginRoute: typeof LoginRoute
   AlliancesAllianceIdRoute: typeof AlliancesAllianceIdRoute
   CharactersCharacterIdRoute: typeof CharactersCharacterIdRoute
@@ -133,13 +116,6 @@ declare module '@tanstack/solid-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -179,7 +155,6 @@ declare module '@tanstack/solid-start/server' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
   LoginRoute: LoginRoute,
   AlliancesAllianceIdRoute: AlliancesAllianceIdRoute,
   CharactersCharacterIdRoute: CharactersCharacterIdRoute,
