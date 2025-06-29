@@ -24,7 +24,7 @@ if (EnvVarResult.error) {
     depth: null,
     colors: true,
   });
-  process.exit(1);
+  throw new Error("Missing required environement variable.");
 }
 
 console.log(EnvVarResult.data);
