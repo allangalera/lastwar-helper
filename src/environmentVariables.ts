@@ -14,17 +14,11 @@ const envVarSchema = z.object({
 
 const envFile = expand(config({ path: `.env` }));
 
-let EnvVarResult;
+// let EnvVarResult;
 
-try {
-  EnvVarResult = envVarSchema.parse({
-    ...envFile.parsed,
-    ...process.env,
-  });
-} catch (e: unknown) {
-  throw new Error("Missing required environement variable.", {
-    cause: e,
-  });
-}
+//   EnvVarResult =
 
-export const EnvVar = EnvVarResult;
+export const EnvVar = envVarSchema.parse({
+  ...envFile.parsed,
+  ...process.env,
+});
