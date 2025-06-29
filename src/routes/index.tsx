@@ -44,7 +44,7 @@ function Home() {
       <Link to="/">Home</Link>
       {/* <Authentication /> */}
       <p>characters</p>
-      <AddCharacterForm />
+      {/* <AddCharacterForm /> */}
       {/* <For each={characters()}>
         {(item) => (
           <CharacterListItem
@@ -55,7 +55,7 @@ function Home() {
         )}
       </For> */}
       <p>Alliances</p>
-      <AddAllianceForm />
+      {/* <AddAllianceForm /> */}
       {/* <For each={alliances()}>
         {(item) => <AlliancesListItem id={item.id} name={item.name!} />}
       </For> */}
