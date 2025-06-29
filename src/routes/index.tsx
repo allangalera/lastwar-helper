@@ -13,12 +13,12 @@ import { CharacterListItem } from "~/components/character-list-item";
 
 export const Route = createFileRoute("/")({
   component: Home,
-  // loader: async ({ context }) => {
-  //   await Promise.allSettled([
-  //     context.queryClient.ensureQueryData(getAlliancesQueryOptions),
-  //     context.queryClient.ensureQueryData(getCharactersQueryOptions),
-  //   ]);
-  // },
+  loader: async ({ context }) => {
+    await Promise.allSettled([
+      context.queryClient.ensureQueryData(getAlliancesQueryOptions),
+      context.queryClient.ensureQueryData(getCharactersQueryOptions),
+    ]);
+  },
 });
 
 function Home() {

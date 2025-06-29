@@ -1,8 +1,10 @@
 import { createEffect, onMount, Show } from "solid-js";
 import { authClient } from "../../auth-client";
 import { useNavigate } from "@tanstack/solid-router";
+import { useQueryClient } from "@tanstack/solid-query";
 
 export function Authentication() {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const session = authClient.useSession();
 
@@ -11,6 +13,7 @@ export function Authentication() {
 
   async function handleSignOut() {
     await authClient.signOut();
+    queryClient.clear();
     navigate({ to: "/login" });
   }
 
