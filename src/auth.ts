@@ -3,7 +3,6 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "./db";
 import * as schema from "./db/schema";
 import { EnvVar } from "./environmentVariables";
-import { reactStartCookies } from "better-auth/react-start";
 
 export const auth = betterAuth({
   socialProviders: {
@@ -20,5 +19,4 @@ export const auth = betterAuth({
     provider: "pg",
     schema,
   }),
-  plugins: [reactStartCookies()],
 });
