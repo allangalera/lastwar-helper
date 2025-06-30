@@ -1,29 +1,29 @@
 import { createEffect, onMount, Show } from "solid-js";
-import { authClient } from "../../auth-client";
+import { useSession, signOut, signIn } from "../../auth-client";
 import { useNavigate } from "@tanstack/solid-router";
 import { useQueryClient } from "@tanstack/solid-query";
 
 export function Authentication() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const session = authClient.useSession();
+  const session = useSession();
 
   const isAuthenticated = () => !!session().data?.session;
   const isPending = () => session().isPending;
 
   async function handleSignOut() {
-    await authClient.signOut();
+    await signOut();
     queryClient.clear();
     navigate({ to: "/login" });
   }
 
   async function handleSignInWithGoogle() {
-    await authClient.signIn.social({
+    await signIn.social({
       provider: "google",
     });
   }
   async function handleSignInWithDiscord() {
-    await authClient.signIn.social({
+    await signIn.social({
       provider: "discord",
     });
   }

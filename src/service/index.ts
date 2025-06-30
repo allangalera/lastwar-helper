@@ -8,95 +8,74 @@ import {
   allianceInsertSchema,
 } from "../db/schema";
 import { nanoid } from "nanoid";
-import { createServerFn } from "@tanstack/solid-start";
+import { createMiddleware, createServerFn } from "@tanstack/solid-start";
 import { getHeaders, setResponseStatus } from "@tanstack/solid-start/server";
 import { queryOptions } from "@tanstack/solid-query";
+import { getSession } from "~/auth-client";
+
+const authMiddleware = createMiddleware({ type: "function" }).server(
+  async ({ next }) => {
+    const { data } = await getSession({
+      fetchOptions: {
+        headers: getHeaders() as HeadersInit,
+      },
+    });
+
+    return await next({
+      context: {
+        user: {
+          id: data?.user.id,
+          name: data?.user.name,
+        },
+      },
+    });
+  }
+);
 
 export const getAlliancesQueryOptions = queryOptions({
   queryKey: ["getAlliances"],
   queryFn: () => getAlliances(),
 });
 
-export const getAlliances = createServerFn().handler(async () => {
-  const headers = getHeaders();
-  const session = await auth.api.getSession({
-    // @ts-expect-error
-    headers: headers,
+export const getAlliances = createServerFn()
+  .middleware([authMiddleware])
+  .handler(async ({ context }) => {
+    return await db
+      .select()
+      .from(alliance)
+      .where(eq(alliance.userId, context?.user.id!));
   });
-
-  if (!session?.session) {
-    setResponseStatus(401);
-    return;
-  }
-
-  return await db
-    .select()
-    .from(alliance)
-    .where(eq(alliance.userId, session?.user.id!));
-});
 export const getCharactersQueryOptions = queryOptions({
   queryKey: ["getCharacters"],
   queryFn: () => getCharacters(),
 });
 
-export const getCharacters = createServerFn().handler(async () => {
-  const headers = getHeaders();
-  const session = await auth.api.getSession({
-    // @ts-expect-error
-    headers: headers,
+export const getCharacters = createServerFn()
+  .middleware([authMiddleware])
+  .handler(async ({ context }) => {
+    return await db
+      .select()
+      .from(character)
+      .where(eq(character.userId, context?.user.id!));
   });
-
-  if (!session?.session) {
-    setResponseStatus(401);
-    return;
-  }
-
-  return await db
-    .select()
-    .from(character)
-    .where(eq(character.userId, session?.user.id!));
-});
 export const getCharacter = createServerFn()
+  .middleware([authMiddleware])
   .validator((data: string) => data)
-  .handler(async (ctx) => {
-    const headers = getHeaders();
-    const session = await auth.api.getSession({
-      // @ts-expect-error
-      headers: headers,
-    });
-
-    if (!session?.session) {
-      setResponseStatus(401);
-      return;
-    }
-
+  .handler(async ({ data, context }) => {
     return await db.query.character.findFirst({
       where: and(
-        eq(character.id, ctx.data),
-        eq(character.userId, session?.user.id!)
+        eq(character.id, data),
+        eq(character.userId, context.user.id!)
       ),
     });
   });
 
 export const getAlliance = createServerFn()
+  .middleware([authMiddleware])
   .validator((data: string) => data)
-  .handler(async (ctx) => {
-    const headers = getHeaders();
-    const session = await auth.api.getSession({
-      // @ts-expect-error
-      headers: headers,
-    });
-
-    if (!session?.session) {
-      setResponseStatus(401);
-      return;
-    }
-
+  .handler(async ({ data, context }) => {
     return await db.query.alliance.findFirst({
-      where: and(
-        eq(alliance.id, ctx.data),
-        eq(alliance.userId, session?.user.id!)
-      ),
+      where: and(eq(alliance.id, data), eq(alliance.userId, context?.user.id!)),
     });
   });
 
@@ -105,25 +84,15 @@ const addAllianceSchema = allianceInsertSchema.pick({
 });
 
 export const addAlliance = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
   .validator((data: unknown) => {
     return addAllianceSchema.parse(data);
   })
-  .handler(async (ctx) => {
-    const headers = getHeaders();
-    const session = await auth.api.getSession({
-      // @ts-expect-error
-      headers: headers,
-    });
-
-    if (!session?.session) {
-      setResponseStatus(401);
-      return;
-    }
-
+  .handler(async ({ data, context }) => {
     const allianceToAdd = allianceInsertSchema.parse({
       id: nanoid(),
-      userId: session?.user.id!,
-      name: ctx.data.name,
+      userId: context?.user.id!,
+      name: data.name,
     });
 
     await db.insert(alliance).values(allianceToAdd);
@@ -136,28 +105,15 @@ const deleteAllianceSchema = allianceInsertSchema.pick({
 });
 
 export const deleteAlliance = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
   .validator((data: unknown) => {
     return deleteAllianceSchema.parse(data);
   })
-  .handler(async (ctx) => {
-    const headers = getHeaders();
-    const session = await auth.api.getSession({
-      // @ts-expect-error
-      headers: headers,
-    });
-
-    if (!session?.session) {
-      setResponseStatus(401);
-      return;
-    }
-
+  .handler(async ({ data, context }) => {
     await db
       .delete(alliance)
       .where(
-        and(
-          eq(alliance.id, ctx.data.id),
-          eq(alliance.userId, session?.user.id!)
-        )
+        and(eq(alliance.id, data.id), eq(alliance.userId, context?.user.id!))
       );
   });
 
@@ -167,26 +123,16 @@ const addCharacterSchema = characterInsertSchema.pick({
 });
 
 export const addCharacter = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
   .validator((data: unknown) => {
     return addCharacterSchema.parse(data);
   })
-  .handler(async (ctx) => {
-    const headers = getHeaders();
-    const session = await auth.api.getSession({
-      // @ts-expect-error
-      headers: headers,
-    });
-
-    if (!session?.session) {
-      setResponseStatus(401);
-      return;
-    }
-
+  .handler(async ({ data, context }) => {
     const characterToAdd = characterInsertSchema.parse({
       id: nanoid(),
-      userId: session?.user.id!,
-      name: ctx.data.name,
-      combatPower: ctx.data.combatPower,
+      userId: context?.user.id!,
+      name: data.name,
+      combatPower: data.combatPower,
     });
     await db.insert(character).values(characterToAdd);
 
@@ -198,27 +144,14 @@ const deleteCharacterSchema = characterInsertSchema.pick({
 });
 
 export const deleteCharacter = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
   .validator((data: unknown) => {
     return deleteCharacterSchema.parse(data);
   })
-  .handler(async (ctx) => {
-    const headers = getHeaders();
-    const session = await auth.api.getSession({
-      // @ts-expect-error
-      headers: headers,
-    });
-
-    if (!session?.session) {
-      setResponseStatus(401);
-      return;
-    }
-
+  .handler(async ({ data, context }) => {
     await db
       .delete(character)
       .where(
-        and(
-          eq(character.id, ctx.data.id),
-          eq(character.userId, session?.user.id!)
-        )
+        and(eq(character.id, data.id), eq(character.userId, context?.user.id!))
       );
   });
