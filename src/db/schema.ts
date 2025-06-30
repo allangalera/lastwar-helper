@@ -63,7 +63,9 @@ export const verification = pgTable("verification", {
 });
 
 export const character = pgTable("character", {
-  id: text("id").primaryKey(),
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => nanoid()),
   userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
@@ -80,7 +82,9 @@ export const character = pgTable("character", {
 export const characterInsertSchema = createInsertSchema(character);
 
 export const alliance = pgTable("alliance", {
-  id: text("id").primaryKey(),
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => nanoid()),
   name: text("name"),
   userId: text("user_id")
     .notNull()
@@ -88,8 +92,8 @@ export const alliance = pgTable("alliance", {
   createdAt: timestamp("created_at").$defaultFn(
     () => /* @__PURE__ */ new Date()
   ),
-  updatedAt: timestamp("updated_at").$defaultFn(
-    () => /* @__PURE__ */ new Date()
-  ),
+  updatedAt: timestamp("updated_at")
+    .$defaultFn(() => /* @__PURE__ */ new Date())
+    .$onUpdate(() => new Date()),
 });
 export const allianceInsertSchema = createInsertSchema(alliance);

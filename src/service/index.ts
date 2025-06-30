@@ -7,9 +7,8 @@ import {
   alliance,
   allianceInsertSchema,
 } from "../db/schema";
-import { nanoid } from "nanoid";
 import { createMiddleware, createServerFn } from "@tanstack/solid-start";
-import { getHeaders, setResponseStatus } from "@tanstack/solid-start/server";
+import { getHeaders } from "@tanstack/solid-start/server";
 import { queryOptions } from "@tanstack/solid-query";
 import { getSession } from "~/auth-client";
 
@@ -90,7 +89,6 @@ export const addAlliance = createServerFn({ method: "POST" })
   })
   .handler(async ({ data, context }) => {
     const allianceToAdd = allianceInsertSchema.parse({
-      id: nanoid(),
       userId: context?.user.id!,
       name: data.name,
     });
@@ -113,7 +111,7 @@ export const deleteAlliance = createServerFn({ method: "POST" })
     await db
       .delete(alliance)
       .where(
-        and(eq(alliance.id, data.id), eq(alliance.userId, context?.user.id!))
+        and(eq(alliance.id, data.id!), eq(alliance.userId, context?.user.id!))
       );
   });
 
@@ -129,7 +127,6 @@ export const addCharacter = createServerFn({ method: "POST" })
   })
   .handler(async ({ data, context }) => {
     const characterToAdd = characterInsertSchema.parse({
-      id: nanoid(),
       userId: context?.user.id!,
       name: data.name,
       combatPower: data.combatPower,
@@ -152,6 +149,6 @@ export const deleteCharacter = createServerFn({ method: "POST" })
     await db
       .delete(character)
       .where(
-        and(eq(character.id, data.id), eq(character.userId, context?.user.id!))
+        and(eq(character.id, data.id!), eq(character.userId, context?.user.id!))
       );
   });
