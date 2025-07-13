@@ -11,32 +11,14 @@
 import { createServerRootRoute } from '@tanstack/solid-start/server'
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as CharactersCharacterIdRouteImport } from './routes/characters/$characterId'
-import { Route as AlliancesAllianceIdRouteImport } from './routes/alliances/$allianceId'
 import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth/$'
 
 const rootServerRouteImport = createServerRootRoute()
 
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CharactersCharacterIdRoute = CharactersCharacterIdRouteImport.update({
-  id: '/characters/$characterId',
-  path: '/characters/$characterId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AlliancesAllianceIdRoute = AlliancesAllianceIdRouteImport.update({
-  id: '/alliances/$allianceId',
-  path: '/alliances/$allianceId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
@@ -47,45 +29,24 @@ const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/login': typeof LoginRoute
-  '/alliances/$allianceId': typeof AlliancesAllianceIdRoute
-  '/characters/$characterId': typeof CharactersCharacterIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/login': typeof LoginRoute
-  '/alliances/$allianceId': typeof AlliancesAllianceIdRoute
-  '/characters/$characterId': typeof CharactersCharacterIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/login': typeof LoginRoute
-  '/alliances/$allianceId': typeof AlliancesAllianceIdRoute
-  '/characters/$characterId': typeof CharactersCharacterIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/login'
-    | '/alliances/$allianceId'
-    | '/characters/$characterId'
+  fullPaths: '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/alliances/$allianceId' | '/characters/$characterId'
-  id:
-    | '__root__'
-    | '/'
-    | '/login'
-    | '/alliances/$allianceId'
-    | '/characters/$characterId'
+  to: '/'
+  id: '__root__' | '/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  LoginRoute: typeof LoginRoute
-  AlliancesAllianceIdRoute: typeof AlliancesAllianceIdRoute
-  CharactersCharacterIdRoute: typeof CharactersCharacterIdRoute
 }
 export interface FileServerRoutesByFullPath {
   '/api/auth/$': typeof ApiAuthSplatServerRoute
@@ -111,32 +72,11 @@ export interface RootServerRouteChildren {
 
 declare module '@tanstack/solid-router' {
   interface FileRoutesByPath {
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/characters/$characterId': {
-      id: '/characters/$characterId'
-      path: '/characters/$characterId'
-      fullPath: '/characters/$characterId'
-      preLoaderRoute: typeof CharactersCharacterIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/alliances/$allianceId': {
-      id: '/alliances/$allianceId'
-      path: '/alliances/$allianceId'
-      fullPath: '/alliances/$allianceId'
-      preLoaderRoute: typeof AlliancesAllianceIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -155,9 +95,6 @@ declare module '@tanstack/solid-start/server' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  LoginRoute: LoginRoute,
-  AlliancesAllianceIdRoute: AlliancesAllianceIdRoute,
-  CharactersCharacterIdRoute: CharactersCharacterIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

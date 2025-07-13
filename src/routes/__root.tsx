@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import {
   Outlet,
   createRootRoute,
@@ -7,6 +8,9 @@ import {
 } from "@tanstack/solid-router";
 import { QueryClientProvider } from "@tanstack/solid-query";
 import { MyRouterContext, queryClient } from "~/router";
+import appCss from "../styles/app.css?url";
+import themeJs from "../lib/theme?url";
+import { Shell } from "~/components/shell";
 
 function NotFound() {
   return <p>404 - Not found</p>;
@@ -26,6 +30,8 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         title: "Last War Helper",
       },
     ],
+    scripts: [{ src: themeJs }],
+    links: [{ rel: "stylesheet", href: appCss }],
   }),
   component: RootComponent,
   notFoundComponent: NotFound,
@@ -34,7 +40,9 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <Shell>
+        <Outlet />
+      </Shell>
     </QueryClientProvider>
   );
 }

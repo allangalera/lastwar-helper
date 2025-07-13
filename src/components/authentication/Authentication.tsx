@@ -1,5 +1,5 @@
 import { createEffect, onMount, Show } from "solid-js";
-import { useSession, signOut, signIn } from "../../auth-client";
+import { useSession, signOut, signIn } from "../../lib/auth/client";
 import { useNavigate } from "@tanstack/solid-router";
 import { useQueryClient } from "@tanstack/solid-query";
 

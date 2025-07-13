@@ -1,10 +1,13 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "./db";
-import * as schema from "./db/schema";
-import { EnvVar } from "./environmentVariables";
+import { db } from "../db";
+import * as schema from "../db/schema";
+import { EnvVar } from "../../environmentVariables";
 
 export const auth = betterAuth({
+  emailAndPassword: {
+    enabled: true,
+  },
   socialProviders: {
     google: {
       clientId: EnvVar.GOOGLE_CLIENT_ID,
