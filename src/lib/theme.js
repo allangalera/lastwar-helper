@@ -2,13 +2,20 @@ const theme = localStorage.getItem("theme") || (window.matchMedia("(prefers-colo
 
 document.documentElement.dataset.theme = theme;
 
-const meta = document.createElement('meta');
-meta.name = "theme-color";
+// Theme color
+const themeColorMeta = document.createElement('meta');
+themeColorMeta.name = "theme-color";
 if (theme === "dark") {
-    meta.content = "#020617"
+    themeColorMeta.content = "#020617"
     // meta.content = "oklch(12.9% 0.042 264.695)"
 } else {
-    meta.content = "#e2e8f0"
+    themeColorMeta.content = "#e2e8f0"
     // meta.content = "oklch(92.9% 0.013 255.508)"
 }
-document.getElementsByTagName('head')[0].appendChild(meta);
+document.getElementsByTagName('head')[0].appendChild(themeColorMeta);
+
+// Color scheme
+const colorSchemeMeta = document.createElement('meta');
+colorSchemeMeta.name = "color-scheme";
+colorSchemeMeta.content = theme
+document.getElementsByTagName('head')[0].appendChild(colorSchemeMeta);
