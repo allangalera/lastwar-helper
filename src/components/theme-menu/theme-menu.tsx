@@ -1,4 +1,5 @@
 import { Menu } from "@ark-ui/solid/menu";
+import { createSignal } from "solid-js";
 
 function setTheme(theme: "dark" | "light" | "system") {
   switch (theme) {
@@ -43,20 +44,46 @@ function setTheme(theme: "dark" | "light" | "system") {
 }
 
 export const ThemeMenu = () => {
+  const [currentTheme, setCurrentTheme] = createSignal(
+    localStorage.getItem("theme") ?? "system"
+  );
+
+  const handleThemeUpdate = (theme: "dark" | "light" | "system") => {
+    setCurrentTheme(theme);
+    setTheme(theme);
+  };
   return (
     <Menu.Root>
-      <Menu.Trigger>
+      <Menu.Trigger class="flex gap-2">
         Theme <Menu.Indicator>➡️</Menu.Indicator>
       </Menu.Trigger>
       <Menu.Positioner>
-        <Menu.Content>
-          <Menu.Item value="light" onSelect={() => setTheme("light")}>
+        <Menu.Content class="py-2 px-4 border border-slate-950 dark:border-slate-200">
+          <Menu.Item
+            value="light"
+            onSelect={() => handleThemeUpdate("light")}
+            classList={{
+              "font-bold": currentTheme() === "light",
+            }}
+          >
             Light
           </Menu.Item>
-          <Menu.Item value="dark" onSelect={() => setTheme("dark")}>
+          <Menu.Item
+            value="dark"
+            onSelect={() => handleThemeUpdate("dark")}
+            classList={{
+              "font-bold": currentTheme() === "dark",
+            }}
+          >
             Dark
           </Menu.Item>
-          <Menu.Item value="system" onSelect={() => setTheme("system")}>
+          <Menu.Item
+            value="system"
+            onSelect={() => handleThemeUpdate("system")}
+            classList={{
+              "font-bold": currentTheme() === "system",
+            }}
+          >
             System
           </Menu.Item>
         </Menu.Content>
