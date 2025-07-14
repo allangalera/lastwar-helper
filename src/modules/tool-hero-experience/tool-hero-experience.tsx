@@ -9,6 +9,7 @@ import {
   heroesArray,
 } from "./state";
 import { formatNumber } from "./utils";
+import expIcon from "~/assets/exp.avif";
 
 function HeroListItem(props: Hero) {
   const updatedHero = () => heroes().get(props.id)!;
@@ -124,9 +125,10 @@ export function ToolHeroExperience() {
           </For>
         </div>
       </div>
-      <p class="p-4 text-end text-xl">
-        Total cost: {formatNumber(totalCost())}
-      </p>
+      <div class="flex items-center justify-end gap-2">
+        <p class="text-end text-xl">Total cost: {formatNumber(totalCost())}</p>
+        <img src={expIcon} class="" />
+      </div>
     </div>
   );
 }
