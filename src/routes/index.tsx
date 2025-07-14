@@ -5,5 +5,9 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  return <></>;
+  return (
+    <>
+      <Link to="/tools/hero-experience">Hero experience calculator</Link>
+    </>
+  );
 }

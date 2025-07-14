@@ -12,6 +12,7 @@ import { createServerRootRoute } from '@tanstack/solid-start/server'
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ToolsHeroExperienceRouteImport } from './routes/tools/hero-experience'
 import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth/$'
 
 const rootServerRouteImport = createServerRootRoute()
@@ -19,6 +20,11 @@ const rootServerRouteImport = createServerRootRoute()
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToolsHeroExperienceRoute = ToolsHeroExperienceRouteImport.update({
+  id: '/tools/hero-experience',
+  path: '/tools/hero-experience',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
@@ -29,24 +35,28 @@ const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/tools/hero-experience': typeof ToolsHeroExperienceRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/tools/hero-experience': typeof ToolsHeroExperienceRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/tools/hero-experience': typeof ToolsHeroExperienceRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/tools/hero-experience'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/tools/hero-experience'
+  id: '__root__' | '/' | '/tools/hero-experience'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ToolsHeroExperienceRoute: typeof ToolsHeroExperienceRoute
 }
 export interface FileServerRoutesByFullPath {
   '/api/auth/$': typeof ApiAuthSplatServerRoute
@@ -79,6 +89,13 @@ declare module '@tanstack/solid-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tools/hero-experience': {
+      id: '/tools/hero-experience'
+      path: '/tools/hero-experience'
+      fullPath: '/tools/hero-experience'
+      preLoaderRoute: typeof ToolsHeroExperienceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 declare module '@tanstack/solid-start/server' {
@@ -95,6 +112,7 @@ declare module '@tanstack/solid-start/server' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ToolsHeroExperienceRoute: ToolsHeroExperienceRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

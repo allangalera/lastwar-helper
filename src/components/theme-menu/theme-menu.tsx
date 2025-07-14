@@ -1,40 +1,58 @@
 import { Menu } from "@ark-ui/solid/menu";
-import { createSignal } from "solid-js";
+import { createSignal, For } from "solid-js";
+import z from "zod/v4";
 
-function setTheme(theme: "dark" | "light" | "system") {
+const Theme = {
+  Light: "light",
+  Dark: "dark",
+  System: "system",
+} as const;
+
+const ThemeColor = {
+  [Theme.Dark]: "#020617",
+  [Theme.Light]: "#e2e8f0",
+};
+
+const themeSchema = z.enum(Object.values(Theme));
+
+type Themes = (typeof Theme)[keyof typeof Theme];
+
+function setTheme(theme: Themes) {
   switch (theme) {
-    case "dark":
-      localStorage.setItem("theme", "dark");
-      document.documentElement.dataset.theme = "dark";
+    case Theme.Dark:
+      localStorage.setItem("theme", Theme.Dark);
+      document.documentElement.dataset.theme = Theme.Dark;
       document
         .querySelector('meta[name="theme-color"]')
-        ?.setAttribute("content", "#020617");
+        ?.setAttribute("content", ThemeColor[Theme.Dark]);
       document
         .querySelector('meta[name="color-scheme"]')
-        ?.setAttribute("content", "dark");
+        ?.setAttribute("content", Theme.Dark);
       return;
-    case "light":
-      localStorage.setItem("theme", "light");
-      document.documentElement.dataset.theme = "light";
+    case Theme.Light:
+      localStorage.setItem("theme", Theme.Light);
+      document.documentElement.dataset.theme = Theme.Light;
       document
         .querySelector('meta[name="theme-color"]')
-        ?.setAttribute("content", "#e2e8f0");
+        ?.setAttribute("content", ThemeColor[Theme.Light]);
       document
         .querySelector('meta[name="color-scheme"]')
-        ?.setAttribute("content", "light");
+        ?.setAttribute("content", Theme.Light);
       return;
-    case "system":
+    case Theme.System:
       localStorage.removeItem("theme");
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
         .matches
-        ? "dark"
-        : "light";
+        ? Theme.Dark
+        : Theme.Light;
       document.documentElement.dataset.theme = systemTheme;
       document
         .querySelector('meta[name="theme-color"]')
         ?.setAttribute(
           "content",
-          systemTheme === "dark" ? "#020617" : "#e2e8f0"
+          systemTheme === Theme.Dark
+            ? ThemeColor[Theme.Dark]
+            : ThemeColor[Theme.Light]
         );
       document
         .querySelector('meta[name="color-scheme"]')
@@ -44,48 +62,37 @@ function setTheme(theme: "dark" | "light" | "system") {
 }
 
 export const ThemeMenu = () => {
-  const [currentTheme, setCurrentTheme] = createSignal(
-    localStorage.getItem("theme") ?? "system"
+  const [currentTheme, setCurrentTheme] = createSignal<Themes>(
+    themeSchema.safeParse(localStorage.getItem("theme")).data ?? Theme.System
   );
 
-  const handleThemeUpdate = (theme: "dark" | "light" | "system") => {
+  const handleThemeUpdate = (theme: Themes) => {
+    console.log(theme);
     setCurrentTheme(theme);
     setTheme(theme);
   };
+
   return (
     <Menu.Root>
       <Menu.Trigger class="flex gap-2">
         Theme <Menu.Indicator>➡️</Menu.Indicator>
       </Menu.Trigger>
       <Menu.Positioner>
-        <Menu.Content class="py-2 px-4 border border-slate-950 dark:border-slate-200">
-          <Menu.Item
-            value="light"
-            onSelect={() => handleThemeUpdate("light")}
-            classList={{
-              "font-bold": currentTheme() === "light",
-            }}
-          >
-            Light
-          </Menu.Item>
-          <Menu.Item
-            value="dark"
-            onSelect={() => handleThemeUpdate("dark")}
-            classList={{
-              "font-bold": currentTheme() === "dark",
-            }}
-          >
-            Dark
-          </Menu.Item>
-          <Menu.Item
-            value="system"
-            onSelect={() => handleThemeUpdate("system")}
-            classList={{
-              "font-bold": currentTheme() === "system",
-            }}
-          >
-            System
-          </Menu.Item>
+        <Menu.Content class="py-2 px-4 border border-slate-950 dark:border-slate-200 bg-slate-300 dark:bg-slate-800">
+          <For each={Object.values(Theme)}>
+            {(theme) => (
+              <Menu.Item
+                class="cursor-pointer hover:underline"
+                value={theme}
+                onSelect={() => handleThemeUpdate(theme)}
+                classList={{
+                  "font-bold": currentTheme() === theme,
+                }}
+              >
+                {theme}
+              </Menu.Item>
+            )}
+          </For>
         </Menu.Content>
       </Menu.Positioner>
     </Menu.Root>
