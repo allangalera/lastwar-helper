@@ -54,31 +54,31 @@ export function Simple() {
 
   const totalCost = () => costForSingleHero() * numberOfHeroes();
   return (
-    <div class="border p-1">
-      <div>
-        <label>
+    <div class="border p-1 flex flex-col gap-4">
+      <div class="flex flex-wrap gap-2">
+        <label class="flex gap-2 items-center">
           Current level:
           <input
             type="number"
-            class="border min-w-14 text-center"
+            class="border w-15 text-center"
             value={currentLevel()}
             onInput={(e) => setCurrentLevel(e.target.valueAsNumber)}
           ></input>
         </label>
-        <label>
+        <label class="flex gap-2 items-center">
           Target level:
           <input
             type="number"
-            class="border min-w-14 text-center"
+            class="border w-15 text-center"
             value={targetLevel()}
             onInput={(e) => setTargetLevel(e.target.valueAsNumber)}
           ></input>
         </label>
-        <label>
+        <label class="flex gap-2 items-center">
           Number of heroes:
           <input
             type="number"
-            class="border min-w-14 text-center"
+            class="border w-15 text-center"
             value={numberOfHeroes()}
             onInput={(e) => setNumberOfHeroes(e.target.valueAsNumber)}
           ></input>
