@@ -27,7 +27,7 @@ export function ToolHeroExperience() {
   });
 
   return (
-    <div class="grid items-center justify-center gap-4 grid-rows-[auto_1fr_auto] h-full">
+    <div class="flex flex-col items-center justify-center gap-4">
       <div class="px-4">
         <h1 class="text-xl">Hero Experience Calculator</h1>
         <RadioGroup.Root

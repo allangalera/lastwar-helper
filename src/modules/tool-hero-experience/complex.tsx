@@ -1,5 +1,9 @@
+import { Dialog } from "@ark-ui/solid/dialog";
 import expIcon from "~/assets/exp.avif";
-import { For } from "solid-js";
+import { Portal } from "solid-js/web";
+import { createEffect, createSignal, For } from "solid-js";
+import { Combobox, useListCollection } from "@ark-ui/solid/combobox";
+import { useFilter } from "@ark-ui/solid/locale";
 import {
   addHero,
   deleteHero,
@@ -8,70 +12,50 @@ import {
   updateHeroTargetLevel,
   heroes,
   heroesArray,
+  availableHeroes,
+  HeroNames,
+  HeroName,
+  applyAllTargetLevel,
 } from "./state";
 import { formatNumber } from "./utils";
+import { HeroCard } from "./hero-card";
 
 function HeroListItem(props: Hero) {
   const updatedHero = () => heroes().get(props.id)!;
   return (
-    <div class="grid gap-2 border p-1 max-w-max">
-      <div class="flex gap-4 items-center">
-        <p class="flex-1">Level:</p>
-        <div class="flex gap-2">
-          <input
-            class="border w-14 text-center"
-            type="number"
-            value={updatedHero().level}
-            onInput={(e) => updateHeroLevel(props.id, parseInt(e.target.value))}
+    <div class="border flex flex-col gap-2 rounded-xs items-center">
+      <div class="flex gap-2">
+        <div>
+          <div class="text-center">
+            <p>Current</p>
+          </div>
+          <HeroCard
+            hero={props.hero}
+            level={updatedHero().level}
+            setLevel={(level) => updateHeroLevel(props.id, level)}
           />
-          <button
-            class="border px-3 py-1"
-            onClick={() => updateHeroLevel(props.id, updatedHero().level - 1)}
-          >
-            -
-          </button>
-          <button
-            class="border px-3 py-1"
-            onClick={() => updateHeroLevel(props.id, updatedHero().level + 1)}
-          >
-            +
-          </button>
+        </div>
+        <div class="flex-1 flex items-center justify-center">-{">"}</div>
+        <div>
+          <div class="text-center">
+            <p>Target</p>
+          </div>
+          <HeroCard
+            hero={props.hero}
+            level={updatedHero().targetLevel}
+            setLevel={(level) => updateHeroTargetLevel(props.id, level)}
+          />
         </div>
       </div>
-      <div class="flex gap-4 items-center">
-        <p class="flex-1">Target Level:</p>
-        <div class="flex gap-2">
-          <input
-            class="border w-14 text-center"
-            type="number"
-            value={updatedHero().targetLevel}
-            onInput={(e) =>
-              updateHeroTargetLevel(props.id, parseInt(e.target.value))
-            }
-          />
-          <button
-            class="border px-3 py-1"
-            onClick={() =>
-              updateHeroTargetLevel(props.id, updatedHero().targetLevel - 1)
-            }
-          >
-            -
-          </button>
-          <button
-            class="border px-3 py-1"
-            onClick={() =>
-              updateHeroTargetLevel(props.id, updatedHero().targetLevel + 1)
-            }
-          >
-            +
-          </button>
-        </div>
-      </div>
-      <div class="flex justify-between">
-        <div class="flex gap-2">
-          <p>Cost:</p>
-          <p>{formatNumber(updatedHero()?.cost)}</p>
-        </div>
+      <div class="border-t w-full text-center flex justify-between items-center p-2">
+        Cost: {formatNumber(updatedHero().cost)}
+        <img src="/assets/exp.avif" class="w-4" />
+        <button
+          class="border px-3 py-1"
+          onClick={() => updateHeroLevel(props.id, updatedHero().targetLevel)}
+        >
+          apply
+        </button>
         <button class="border px-3 py-1" onClick={() => deleteHero(props.id)}>
           delete
         </button>
@@ -81,18 +65,89 @@ function HeroListItem(props: Hero) {
 }
 
 function AddHeroForm() {
-  const handleSubmit = () => {
+  const [open, setOpen] = createSignal(false);
+  const handleSubmit = (hero: HeroNames) => {
     addHero({
+      hero: hero,
       level: 1,
       targetLevel: 5,
       cost: 0,
     });
+    setOpen(false);
+  };
+  const filterFn = useFilter({ sensitivity: "base" });
+
+  const { collection, filter, set } = useListCollection({
+    initialItems: availableHeroes(),
+    filter: filterFn().contains,
+  });
+
+  createEffect(() => {
+    const usedHeroes = Array.from(heroes().values()).map((item) => item.hero);
+    set(Object.values(HeroName).filter((item) => !usedHeroes.includes(item)));
+  });
+
+  const handleInputChange = (details: any) => {
+    filter(details.inputValue);
   };
   return (
     <div class="grid">
-      <button class="border px-3 py-1" onClick={handleSubmit}>
+      <button
+        class="border px-3 py-1"
+        type="button"
+        onClick={() => setOpen(true)}
+      >
         Add hero
       </button>
+      <Dialog.Root open={open()} onOpenChange={() => setOpen(false)}>
+        <Portal>
+          <Dialog.Backdrop class="fixed w-screen h-screen bg-neutral-600/40 top-0 backdrop-blur-sm z-50" />
+          <Dialog.Positioner class="fixed w-full h-full top-0 flex items-center justify-center z-100">
+            <Dialog.Content class="bg-slate-300 dark:bg-slate-800 border p-3 rounded-xs border-slate-950 dark:border-slate-200 overflow-auto max-w-full max-h-full">
+              <Dialog.Title class="text-center text-xl">
+                Select hero
+              </Dialog.Title>
+              <Dialog.Description>
+                <Combobox.Root
+                  collection={collection()}
+                  onInputValueChange={handleInputChange}
+                  onSelect={(details) =>
+                    handleSubmit(details.itemValue as HeroNames)
+                  }
+                >
+                  <Combobox.Control>
+                    <Combobox.Input
+                      autofocus
+                      onSelect={() => console.log("here")}
+                    />
+                    <Combobox.Trigger>Open</Combobox.Trigger>
+                    <Combobox.ClearTrigger>Clear</Combobox.ClearTrigger>
+                  </Combobox.Control>
+                  <Portal>
+                    <Combobox.Positioner>
+                      <Combobox.Content class="z-200 bg-slate-300 dark:bg-slate-800 border p-3 rounded-xs border-slate-950 dark:border-slate-200">
+                        <Combobox.ItemGroup>
+                          <For each={collection().items}>
+                            {(item) => (
+                              <Combobox.Item item={item}>
+                                <Combobox.ItemText>{item}</Combobox.ItemText>
+                                <Combobox.ItemIndicator>
+                                  ✓
+                                </Combobox.ItemIndicator>
+                              </Combobox.Item>
+                            )}
+                          </For>
+                        </Combobox.ItemGroup>
+                      </Combobox.Content>
+                    </Combobox.Positioner>
+                  </Portal>
+                </Combobox.Root>
+              </Dialog.Description>
+              <Dialog.CloseTrigger>Close</Dialog.CloseTrigger>
+            </Dialog.Content>
+          </Dialog.Positioner>
+        </Portal>
+      </Dialog.Root>
     </div>
   );
 }
@@ -105,13 +160,14 @@ export function Complex() {
   return (
     <>
       <AddHeroForm />
-      <div class="px-4 h-full overflow-hidden">
-        <div class="grid gap-2 overflow-auto py-2 max-h-full justify-center">
+      <div class="px-4 h-full overflow-hidden w-full">
+        <div class="flex flex-wrap gap-4 overflow-auto py-2 max-h-full justify-center">
           <For each={heroesArray()}>
             {(heroId) => {
               const hero = heroes().get(heroId)!;
               return (
                 <HeroListItem
+                  hero={hero.hero}
                   id={heroId}
                   level={hero.level}
                   targetLevel={hero.targetLevel}
@@ -124,7 +180,11 @@ export function Complex() {
       </div>
       <div class="flex items-center justify-end gap-2">
         <p class="text-end text-xl">Total cost: {formatNumber(totalCost())}</p>
-        <img src={expIcon} class="" />
+        <img src="/assets/exp.avif" />
+
+        <button class="border px-3 py-1" onClick={() => applyAllTargetLevel()}>
+          Apply all
+        </button>
       </div>
     </>
   );
