@@ -16,7 +16,7 @@ export function HeroCard(props: HeroCardProps) {
   return (
     <Show when={heroInformation()}>
       <div
-        class="flex flex-col border rounded-xs w-30 gap-1"
+        class="flex flex-col border rounded-xs w-28 gap-1"
         classList={{
           "bg-amber-300 dark:bg-amber-600":
             heroInformation().category === HeroCategory.UR,
