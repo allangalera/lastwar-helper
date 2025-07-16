@@ -244,6 +244,10 @@ export type Hero = z.infer<typeof heroSchema>;
 
 export type HeroInsert = z.infer<typeof heroInsertSchema>;
 
+const localStorageDataShema = z.array(
+  z.tuple([heroSchema.shape.id, heroSchema])
+);
+
 const LOCAL_STORAGE_KEY = "last-war-hero-experience-calculator";
 
 function getDataFromLocalStorage() {
@@ -255,7 +259,13 @@ function getDataFromLocalStorage() {
   if (!loadFromLocalStorage) {
     return;
   }
-  return new Map(JSON.parse(loadFromLocalStorage));
+  const validatedLocalStorageData = localStorageDataShema.safeParse(
+    JSON.parse(loadFromLocalStorage)
+  );
+  if (!validatedLocalStorageData.success) {
+    return;
+  }
+  return new Map(validatedLocalStorageData.data);
 }
 
 const dataFromLocalStorage = getDataFromLocalStorage();
