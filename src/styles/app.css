@@ -1,3 +1,7 @@
 @import "tailwindcss";
 
+body {
+  font-family: "Source Sans Pro", sans-serif;
+}
+
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));

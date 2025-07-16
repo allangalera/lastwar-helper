@@ -6,6 +6,8 @@ type HeroCardProps = {
   hero: HeroNames;
   level: number;
   setLevel: (v: number) => void;
+  targetLevel: number;
+  setTargetLevel: (v: number) => void;
   tier?: number;
 };
 
@@ -43,12 +45,19 @@ export function HeroCard(props: HeroCardProps) {
             src={`/assets/heroes/${pascalCase(props.hero)}_Thumbnail.webp`}
           />
         </div>
-        <div class="flex p-2 gap-2">
-          <p>Lv.</p>
+        <div class="grid grid-cols-[auto_1fr] gap-1 p-1">
+          <p>From</p>
           <input
             class="border w-full text-center appearance-none"
             type="number"
             value={props.level}
+            onInput={(e) => props.setLevel(e.target.valueAsNumber)}
+          />
+          <p>To</p>
+          <input
+            class="border w-full text-center appearance-none"
+            type="number"
+            value={props.targetLevel}
             onInput={(e) => props.setLevel(e.target.valueAsNumber)}
           />
         </div>

@@ -22,45 +22,37 @@ import { formatNumber } from "./utils";
 import { HeroCard } from "./hero-card";
 import { Menu } from "@ark-ui/solid/menu";
 
+import { AiOutlineDelete } from "solid-icons/ai";
+
 function HeroListItem(props: Hero) {
   const updatedHero = () => heroes().get(props.id)!;
   return (
-    <div class="border flex flex-col gap-2 rounded-xs items-center">
-      <div class="flex gap-2">
-        <div>
-          <div class="text-center">
-            <p>Current</p>
-          </div>
-          <HeroCard
-            hero={props.hero}
-            level={updatedHero().level}
-            setLevel={(level) => updateHeroLevel(props.id, level)}
-          />
-        </div>
-        <div class="flex-1 flex items-center justify-center">-{">"}</div>
-        <div>
-          <div class="text-center">
-            <p>Target</p>
-          </div>
-          <HeroCard
-            hero={props.hero}
-            level={updatedHero().targetLevel}
-            setLevel={(level) => updateHeroTargetLevel(props.id, level)}
-          />
-        </div>
+    <div class="border flex flex-col rounded-xs items-center">
+      <div class="flex p-2">
+        <HeroCard
+          hero={props.hero}
+          level={updatedHero().level}
+          setLevel={(level) => updateHeroLevel(props.id, level)}
+          targetLevel={updatedHero().targetLevel}
+          setTargetLevel={(level) => updateHeroTargetLevel(props.id, level)}
+        />
       </div>
       <div class="border-t w-full text-center flex justify-between items-center p-2">
-        Cost: {formatNumber(updatedHero().cost)}
-        <img src="/assets/exp.avif" class="w-4" />
-        <button
-          class="border px-3 py-1"
-          onClick={() => updateHeroLevel(props.id, updatedHero().targetLevel)}
-        >
-          apply
-        </button>
-        <button class="border px-3 py-1" onClick={() => deleteHero(props.id)}>
-          delete
-        </button>
+        <div class="flex items-center gap-2">
+          {formatNumber(updatedHero().cost)}
+          <img src="/assets/exp.avif" class="w-6" />
+        </div>
+        <div class="flex gap-1">
+          {/* <button
+            class="border px-3 py-1"
+            onClick={() => updateHeroLevel(props.id, updatedHero().targetLevel)}
+          >
+            apply
+          </button> */}
+          <button class="border p-1" onClick={() => deleteHero(props.id)}>
+            <AiOutlineDelete />
+          </button>
+        </div>
       </div>
     </div>
   );
