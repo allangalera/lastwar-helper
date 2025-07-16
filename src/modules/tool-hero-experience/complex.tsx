@@ -204,8 +204,8 @@ export function Complex() {
         </div>
       </div>
       <div class="flex items-center justify-end gap-2">
-        <p class="text-end text-xl">Total cost: {formatNumber(totalCost())}</p>
-        <img src="/assets/exp.avif" />
+        <p class="text-end text-xl">{formatNumber(totalCost())}</p>
+        <img src="/assets/exp-chest.avif" />
 
         <button class="border px-3 py-1" onClick={() => applyAllTargetLevel()}>
           Apply all

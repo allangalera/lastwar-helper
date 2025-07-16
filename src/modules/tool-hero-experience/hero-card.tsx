@@ -18,9 +18,12 @@ export function HeroCard(props: HeroCardProps) {
       <div
         class="flex flex-col border rounded-xs w-30 gap-1"
         classList={{
-          "bg-amber-600": heroInformation().category === HeroCategory.UR,
-          "bg-purple-600": heroInformation().category === HeroCategory.SSR,
-          "bg-sky-600": heroInformation().category === HeroCategory.SR,
+          "bg-amber-300 dark:bg-amber-600":
+            heroInformation().category === HeroCategory.UR,
+          "bg-purple-300 dark:bg-purple-600":
+            heroInformation().category === HeroCategory.SSR,
+          "bg-sky-300 dark:bg-sky-600":
+            heroInformation().category === HeroCategory.SR,
         }}
       >
         <div class="grid grid-cols-[25px_1fr_25px] items-center">
