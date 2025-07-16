@@ -16,9 +16,11 @@ import {
   HeroNames,
   HeroName,
   applyAllTargetLevel,
+  resetTargetLevelToCurrentLevel,
 } from "./state";
 import { formatNumber } from "./utils";
 import { HeroCard } from "./hero-card";
+import { Menu } from "@ark-ui/solid/menu";
 
 function HeroListItem(props: Hero) {
   const updatedHero = () => heroes().get(props.id)!;
@@ -116,10 +118,7 @@ function AddHeroForm() {
                   }
                 >
                   <Combobox.Control>
-                    <Combobox.Input
-                      autofocus
-                      onSelect={() => console.log("here")}
-                    />
+                    <Combobox.Input autofocus />
                     <Combobox.Trigger>Open</Combobox.Trigger>
                     <Combobox.ClearTrigger>Clear</Combobox.ClearTrigger>
                   </Combobox.Control>
@@ -152,14 +151,54 @@ function AddHeroForm() {
   );
 }
 
+function HelperActions() {
+  const actions = ["reset"];
+
+  const handleActionSelected = (action: string) => {
+    switch (action) {
+      case "reset":
+        resetTargetLevelToCurrentLevel();
+        return;
+    }
+  };
+  return (
+    <Menu.Root>
+      <Menu.Trigger class="border px-3 py-1 flex gap-2">
+        Actions <Menu.Indicator>➡️</Menu.Indicator>
+      </Menu.Trigger>
+      <Portal>
+        <Menu.Positioner>
+          <Menu.Content class="py-2 px-4 border border-slate-950 dark:border-slate-200 bg-slate-300 dark:bg-slate-800">
+            <For each={actions}>
+              {(action) => (
+                <Menu.Item
+                  class="cursor-pointer hover:underline"
+                  value={action}
+                  onSelect={() => handleActionSelected(action)}
+                >
+                  {action}
+                </Menu.Item>
+              )}
+            </For>
+          </Menu.Content>
+        </Menu.Positioner>
+      </Portal>
+    </Menu.Root>
+  );
+}
+
 export function Complex() {
-  const totalCost = () =>
-    heroes()
+  const totalCost = () => {
+    return heroes()
       .values()
       .reduce((sum, item) => sum + item.cost, 0);
+  };
   return (
     <>
-      <AddHeroForm />
+      <div class="flex gap-4">
+        <AddHeroForm />
+        <HelperActions />
+      </div>
       <div class="px-4 h-full overflow-hidden w-full">
         <div class="flex flex-wrap gap-4 overflow-auto py-2 max-h-full justify-center">
           <For each={heroesArray()}>

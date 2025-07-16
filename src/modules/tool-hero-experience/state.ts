@@ -358,7 +358,17 @@ export function applyAllTargetLevel() {
     JSON.parse(JSON.stringify(Array.from(heroes())))
   ) as Map<Hero["id"], Hero>;
   heroesCopy.forEach((item) =>
-    heroesCopy.set(item.id, { ...item, level: item.targetLevel })
+    heroesCopy.set(item.id, { ...item, level: item.targetLevel, cost: 0 })
+  );
+  setHeroes(heroesCopy);
+}
+
+export function resetTargetLevelToCurrentLevel() {
+  const heroesCopy = new Map(
+    JSON.parse(JSON.stringify(Array.from(heroes())))
+  ) as Map<Hero["id"], Hero>;
+  heroesCopy.forEach((item) =>
+    heroesCopy.set(item.id, { ...item, targetLevel: item.level, cost: 0 })
   );
   setHeroes(heroesCopy);
 }

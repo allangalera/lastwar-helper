@@ -68,7 +68,6 @@ export const ThemeMenu = () => {
   );
 
   const handleThemeUpdate = (theme: Themes) => {
-    console.log(theme);
     setCurrentTheme(theme);
     setTheme(theme);
   };
