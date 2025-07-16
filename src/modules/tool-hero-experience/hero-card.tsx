@@ -58,7 +58,7 @@ export function HeroCard(props: HeroCardProps) {
             class="border w-full text-center appearance-none"
             type="number"
             value={props.targetLevel}
-            onInput={(e) => props.setLevel(e.target.valueAsNumber)}
+            onInput={(e) => props.setTargetLevel(e.target.valueAsNumber)}
           />
         </div>
       </div>

@@ -43,12 +43,6 @@ function HeroListItem(props: Hero) {
           <img src="/assets/exp.avif" class="w-6" />
         </div>
         <div class="flex gap-1">
-          {/* <button
-            class="border px-3 py-1"
-            onClick={() => updateHeroLevel(props.id, updatedHero().targetLevel)}
-          >
-            apply
-          </button> */}
           <button class="border p-1" onClick={() => deleteHero(props.id)}>
             <AiOutlineDelete />
           </button>
