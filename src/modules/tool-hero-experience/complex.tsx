@@ -37,10 +37,10 @@ function HeroListItem(props: Hero) {
           setTargetLevel={(level) => updateHeroTargetLevel(props.id, level)}
         />
       </div>
-      <div class="border-t w-full text-center flex justify-between items-center p-2">
-        <div class="flex items-center gap-2">
+      <div class="border-t w-full text-center flex justify-between items-center p-2 gap-2">
+        <div class="flex items-center gap-1">
           {formatNumber(updatedHero().cost)}
-          <img src="/assets/exp.avif" class="w-6" />
+          <img src="/assets/exp.avif" class="w-5" />
         </div>
         <div class="flex gap-1">
           <button class="border p-1" onClick={() => deleteHero(props.id)}>
