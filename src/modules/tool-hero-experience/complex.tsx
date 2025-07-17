@@ -65,17 +65,13 @@ function AddHeroForm() {
   };
   return (
     <div class="grid">
-      <button
-        class="border px-3 py-1"
-        type="button"
-        onClick={() => setOpen(true)}
-      >
+      <Button type="button" onClick={() => setOpen(true)}>
         Add hero
-      </button>
+      </Button>
       <Dialog.Root open={open()} onOpenChange={() => setOpen(false)}>
         <Portal>
-          <Dialog.Backdrop class="fixed w-screen h-screen bg-neutral-600/40 top-0 backdrop-blur-sm z-50" />
-          <Dialog.Positioner class="fixed w-full h-full top-0 flex items-center justify-center z-100">
+          <Dialog.Backdrop class="fixed w-screen h-screen bg-neutral-600/40 top-0 backdrop-blur-sm z-100" />
+          <Dialog.Positioner class="fixed w-full h-full top-0 flex items-center justify-center z-200">
             <Dialog.Content class="bg-slate-300 dark:bg-slate-800 border p-3 rounded-xs border-slate-950 dark:border-slate-200 overflow-auto max-w-full max-h-full">
               <Dialog.Title class="text-center text-xl">
                 Select hero
@@ -192,7 +188,11 @@ export function Complex() {
         <p class="text-end text-xl">{formatNumber(totalCost())}</p>
         <img src="/assets/exp-chest.avif" />
 
-        <Button variant="positive" onClick={() => applyAllTargetLevel()}>
+        <Button
+          color="positive"
+          onClick={() => applyAllTargetLevel()}
+          disabled={totalCost() === 0}
+        >
           Upgrade
         </Button>
       </div>

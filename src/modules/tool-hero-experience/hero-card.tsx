@@ -72,7 +72,7 @@ export function HeroCard(props: HeroCardProps) {
             {props.cost}
             <img src="/assets/exp.avif" class="w-5" />
           </div>
-          <Button square variant="negative" onClick={() => props.onDelete()}>
+          <Button square color="negative" onClick={() => props.onDelete()}>
             <AiFillDelete />
           </Button>
         </div>
