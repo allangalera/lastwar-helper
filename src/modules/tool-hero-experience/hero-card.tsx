@@ -21,7 +21,7 @@ export function HeroCard(props: HeroCardProps) {
   return (
     <Show when={heroInformation()}>
       <div
-        class="flex flex-col border-none rounded-md w-32 gap-1"
+        class="flex flex-col border-none rounded-md w-32 gap-1 overflow-hidden"
         classList={{
           "bg-amber-300 dark:bg-amber-600":
             heroInformation().category === HeroCategory.UR,
@@ -31,7 +31,7 @@ export function HeroCard(props: HeroCardProps) {
             heroInformation().category === HeroCategory.SR,
         }}
       >
-        <div class="grid grid-cols-[25px_1fr_25px] items-center  bg-neutral-950/30">
+        <div class="grid grid-cols-[25px_1fr_25px] items-center bg-neutral-100/30 dark:bg-neutral-950/30">
           <div>
             <img
               src={`/assets/${pascalCase(
@@ -67,7 +67,7 @@ export function HeroCard(props: HeroCardProps) {
             onInput={(e) => props.setTargetLevel(e.target.valueAsNumber)}
           />
         </div>
-        <div class="flex justify-between gap-2 p-1 bg-neutral-950/30">
+        <div class="flex justify-between gap-2 p-1 bg-neutral-100/30 dark:bg-neutral-950/30">
           <div class="flex items-center gap-1">
             {props.cost}
             <img src="/assets/exp.avif" class="w-5" />
