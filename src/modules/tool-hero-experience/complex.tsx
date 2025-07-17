@@ -171,7 +171,7 @@ export function Complex() {
         <HelperActions />
       </div>
       <div class="h-full overflow-hidden w-full">
-        <div class="flex flex-wrap gap-4 overflow-auto py-2 max-h-full justify-center">
+        <div class="flex flex-wrap gap-2 overflow-auto py-2 max-h-full justify-center">
           <For each={heroesArray()}>
             {(heroId) => {
               const hero = heroes().get(heroId)!;
