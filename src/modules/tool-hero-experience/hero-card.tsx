@@ -1,6 +1,9 @@
 import { pascalCase } from "change-case";
 import { HeroCategory, HeroInformation, HeroNames } from "./state";
 import { Show } from "solid-js";
+import { AiFillDelete } from "solid-icons/ai";
+import { Button } from "~/components/button";
+import { Input } from "~/components/input";
 
 type HeroCardProps = {
   hero: HeroNames;
@@ -9,6 +12,8 @@ type HeroCardProps = {
   targetLevel: number;
   setTargetLevel: (v: number) => void;
   tier?: number;
+  cost: string;
+  onDelete: () => void;
 };
 
 export function HeroCard(props: HeroCardProps) {
@@ -16,7 +21,7 @@ export function HeroCard(props: HeroCardProps) {
   return (
     <Show when={heroInformation()}>
       <div
-        class="flex flex-col border rounded-xs w-28 gap-1"
+        class="flex flex-col border-none rounded-md w-32 gap-1"
         classList={{
           "bg-amber-300 dark:bg-amber-600":
             heroInformation().category === HeroCategory.UR,
@@ -26,7 +31,7 @@ export function HeroCard(props: HeroCardProps) {
             heroInformation().category === HeroCategory.SR,
         }}
       >
-        <div class="grid grid-cols-[25px_1fr_25px] items-center">
+        <div class="grid grid-cols-[25px_1fr_25px] items-center  bg-neutral-950/30">
           <div>
             <img
               src={`/assets/${pascalCase(
@@ -50,19 +55,26 @@ export function HeroCard(props: HeroCardProps) {
         </div>
         <div class="grid grid-cols-[auto_1fr] gap-1 p-1">
           <p>From</p>
-          <input
-            class="border w-full text-center appearance-none"
+          <Input
             type="number"
             value={props.level}
             onInput={(e) => props.setLevel(e.target.valueAsNumber)}
           />
           <p>To</p>
-          <input
-            class="border w-full text-center appearance-none"
+          <Input
             type="number"
             value={props.targetLevel}
             onInput={(e) => props.setTargetLevel(e.target.valueAsNumber)}
           />
+        </div>
+        <div class="flex justify-between gap-2 p-1 bg-neutral-950/30">
+          <div class="flex items-center gap-1">
+            {props.cost}
+            <img src="/assets/exp.avif" class="w-5" />
+          </div>
+          <Button square variant="negative" onClick={() => props.onDelete()}>
+            <AiFillDelete />
+          </Button>
         </div>
       </div>
     </Show>

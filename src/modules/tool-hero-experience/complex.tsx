@@ -23,32 +23,35 @@ import { HeroCard } from "./hero-card";
 import { Menu } from "@ark-ui/solid/menu";
 
 import { AiOutlineDelete } from "solid-icons/ai";
+import { Button } from "~/components/button";
 
 function HeroListItem(props: Hero) {
   const updatedHero = () => heroes().get(props.id)!;
   return (
-    <div class="border flex flex-col rounded-xs items-center">
-      <div class="flex p-2">
-        <HeroCard
-          hero={props.hero}
-          level={updatedHero().level}
-          setLevel={(level) => updateHeroLevel(props.id, level)}
-          targetLevel={updatedHero().targetLevel}
-          setTargetLevel={(level) => updateHeroTargetLevel(props.id, level)}
-        />
-      </div>
-      <div class="border-t w-full text-center flex justify-between items-center p-2 gap-2">
-        <div class="flex items-center gap-1">
-          {formatNumber(updatedHero().cost)}
-          <img src="/assets/exp.avif" class="w-5" />
-        </div>
-        <div class="flex gap-1">
-          <button class="border p-1" onClick={() => deleteHero(props.id)}>
-            <AiOutlineDelete />
-          </button>
-        </div>
-      </div>
-    </div>
+    // <div class="border flex flex-col rounded-md items-center">
+    //   <div class="flex p-2">
+    <HeroCard
+      hero={props.hero}
+      level={updatedHero().level}
+      setLevel={(level) => updateHeroLevel(props.id, level)}
+      targetLevel={updatedHero().targetLevel}
+      setTargetLevel={(level) => updateHeroTargetLevel(props.id, level)}
+      cost={formatNumber(updatedHero().cost)}
+      onDelete={() => deleteHero(props.id)}
+    />
+    //   </div>
+    //   <div class="border-t w-full text-center flex justify-between items-center p-2 gap-2">
+    //     <div class="flex items-center gap-1">
+    //       {formatNumber(updatedHero().cost)}
+    //       <img src="/assets/exp.avif" class="w-5" />
+    //     </div>
+    //     <div class="flex gap-1">
+    //       <button class="border p-1" onClick={() => deleteHero(props.id)}>
+    //         <AiOutlineDelete />
+    //       </button>
+    //     </div>
+    //   </div>
+    // </div>
   );
 }
 
@@ -207,9 +210,9 @@ export function Complex() {
         <p class="text-end text-xl">{formatNumber(totalCost())}</p>
         <img src="/assets/exp-chest.avif" />
 
-        <button class="border px-3 py-1" onClick={() => applyAllTargetLevel()}>
-          Apply all
-        </button>
+        <Button variant="positive" onClick={() => applyAllTargetLevel()}>
+          Upgrade
+        </Button>
       </div>
     </>
   );
