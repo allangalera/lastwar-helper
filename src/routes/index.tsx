@@ -7,7 +7,12 @@ export const Route = createFileRoute("/")({
 function Home() {
   return (
     <>
-      <Link to="/tools/hero-experience">Hero experience calculator</Link>
+      <Link to="/tools/hero-experience-calculator">
+        Hero experience calculator
+      </Link>
+      <Link to="/tools/hero-experience-upgrade-planner">
+        Hero experience upgrade planner
+      </Link>
     </>
   );
 }

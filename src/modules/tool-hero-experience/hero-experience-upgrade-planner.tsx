@@ -154,14 +154,15 @@ function HelperActions() {
   );
 }
 
-export function Complex() {
+export function HeroExperienceUpgradePlanner() {
   const totalCost = () => {
     return heroes()
       .values()
       .reduce((sum, item) => sum + item.cost, 0);
   };
   return (
-    <>
+    <div class="flex flex-col items-center justify-center gap-4">
+      <h1 class="text-xl">Hero Experience Upgrade Planner</h1>
       <div class="flex gap-4">
         <AddHeroForm />
         <HelperActions />
@@ -196,6 +197,6 @@ export function Complex() {
           Upgrade
         </Button>
       </div>
-    </>
+    </div>
   );
 }
