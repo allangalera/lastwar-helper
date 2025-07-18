@@ -14,6 +14,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ToolsHeroExperienceUpgradePlannerRouteImport } from './routes/tools/hero-experience-upgrade-planner'
 import { Route as ToolsHeroExperienceCalculatorRouteImport } from './routes/tools/hero-experience-calculator'
+import { Route as ToolsHeroExperienceRouteImport } from './routes/tools/hero-experience'
 import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth/$'
 
 const rootServerRouteImport = createServerRootRoute()
@@ -35,6 +36,11 @@ const ToolsHeroExperienceCalculatorRoute =
     path: '/tools/hero-experience-calculator',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ToolsHeroExperienceRoute = ToolsHeroExperienceRouteImport.update({
+  id: '/tools/hero-experience',
+  path: '/tools/hero-experience',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -43,17 +49,20 @@ const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/tools/hero-experience': typeof ToolsHeroExperienceRoute
   '/tools/hero-experience-calculator': typeof ToolsHeroExperienceCalculatorRoute
   '/tools/hero-experience-upgrade-planner': typeof ToolsHeroExperienceUpgradePlannerRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/tools/hero-experience': typeof ToolsHeroExperienceRoute
   '/tools/hero-experience-calculator': typeof ToolsHeroExperienceCalculatorRoute
   '/tools/hero-experience-upgrade-planner': typeof ToolsHeroExperienceUpgradePlannerRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/tools/hero-experience': typeof ToolsHeroExperienceRoute
   '/tools/hero-experience-calculator': typeof ToolsHeroExperienceCalculatorRoute
   '/tools/hero-experience-upgrade-planner': typeof ToolsHeroExperienceUpgradePlannerRoute
 }
@@ -61,22 +70,26 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/tools/hero-experience'
     | '/tools/hero-experience-calculator'
     | '/tools/hero-experience-upgrade-planner'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/tools/hero-experience'
     | '/tools/hero-experience-calculator'
     | '/tools/hero-experience-upgrade-planner'
   id:
     | '__root__'
     | '/'
+    | '/tools/hero-experience'
     | '/tools/hero-experience-calculator'
     | '/tools/hero-experience-upgrade-planner'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ToolsHeroExperienceRoute: typeof ToolsHeroExperienceRoute
   ToolsHeroExperienceCalculatorRoute: typeof ToolsHeroExperienceCalculatorRoute
   ToolsHeroExperienceUpgradePlannerRoute: typeof ToolsHeroExperienceUpgradePlannerRoute
 }
@@ -125,6 +138,13 @@ declare module '@tanstack/solid-router' {
       preLoaderRoute: typeof ToolsHeroExperienceCalculatorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tools/hero-experience': {
+      id: '/tools/hero-experience'
+      path: '/tools/hero-experience'
+      fullPath: '/tools/hero-experience'
+      preLoaderRoute: typeof ToolsHeroExperienceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 declare module '@tanstack/solid-start/server' {
@@ -141,6 +161,7 @@ declare module '@tanstack/solid-start/server' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ToolsHeroExperienceRoute: ToolsHeroExperienceRoute,
   ToolsHeroExperienceCalculatorRoute: ToolsHeroExperienceCalculatorRoute,
   ToolsHeroExperienceUpgradePlannerRoute:
     ToolsHeroExperienceUpgradePlannerRoute,
