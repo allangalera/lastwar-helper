@@ -3,7 +3,6 @@ import { HeroExperienceUpgradePlanner } from "~/modules/tool-hero-experience/her
 
 export const Route = createFileRoute("/tools/hero-experience-upgrade-planner")({
   component: RouteComponent,
-  ssr: "data-only",
 });
 
 function RouteComponent() {
