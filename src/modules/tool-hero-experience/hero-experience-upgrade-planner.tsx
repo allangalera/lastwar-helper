@@ -72,7 +72,7 @@ function AddHeroForm() {
         <Portal>
           <Dialog.Backdrop class="fixed w-screen h-screen bg-neutral-600/40 top-0 backdrop-blur-sm z-100" />
           <Dialog.Positioner class="fixed w-full h-full top-0 flex items-center justify-center z-200">
-            <Dialog.Content class="bg-slate-300 dark:bg-slate-800 border p-3 rounded-xs border-slate-950 dark:border-slate-200 overflow-auto max-w-full max-h-full">
+            <Dialog.Content class="bg-slate-300 dark:bg-slate-800 border p-3 rounded-xs border-slate-950 dark:border-slate-200 overflow-auto max-w-full max-h-full relative top-[-12vh]">
               <Dialog.Title class="text-center text-xl">
                 Select hero
               </Dialog.Title>
