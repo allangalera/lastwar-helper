@@ -39,7 +39,7 @@ export function HeroCard(props: HeroCardProps) {
               )}_Capability.webp`}
             />
           </div>
-          <div class="flex-1 text-center text-xs font-medium">
+          <div class="flex-1 text-center text-sm font-medium">
             {pascalCase(props.hero)}
           </div>
           <div>
@@ -54,13 +54,13 @@ export function HeroCard(props: HeroCardProps) {
           />
         </div>
         <div class="grid grid-cols-[auto_1fr] gap-1 p-1">
-          <p>From</p>
+          <p class="text-sm">From</p>
           <Input
             type="number"
             value={props.level}
             onInput={(e) => props.setLevel(e.target.valueAsNumber)}
           />
-          <p>To</p>
+          <p class="text-sm">To</p>
           <Input
             type="number"
             value={props.targetLevel}
@@ -68,7 +68,7 @@ export function HeroCard(props: HeroCardProps) {
           />
         </div>
         <div class="flex justify-between gap-2 p-1 bg-neutral-100/30 dark:bg-neutral-950/30">
-          <div class="flex items-center gap-1">
+          <div class="flex items-center gap-1 text-sm">
             {props.cost}
             <img src="/assets/exp.avif" class="w-5" />
           </div>
